@@ -11,12 +11,15 @@ import AVFoundation
 
 class ViewController: UIViewController {
     
+    // Mark Properties
+    
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var speciesLabel: UILabel!
     
     var audioPlayer: AVAudioPlayer!
     var animals = [Animal]()
     
+    // Mark Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +27,6 @@ class ViewController: UIViewController {
         scrollView.contentSize = CGSize(width: 1125, height: 500)
         scrollView.delegate = self
     
-        
         let lion = Animal(name: "Lambert", species: "Lion", age: 33, image: UIImage(named: "lion")!, soundPath: "lionSound" )
         
         let flamingo = Animal(name: "Phil", species: "Flamingo", age: 42, image: UIImage(named: "flamingo")!, soundPath: "flamingoSound" )
@@ -43,9 +45,12 @@ class ViewController: UIViewController {
         addImageViews()
     }
     
+    // Mark Button and View Creation
+    
     func addButtons() {
         var xPos = 0
         let yPos = 375
+        
         for (index, animal) in animals.enumerated() {
             let button = UIButton(type: .system)
             
@@ -65,6 +70,7 @@ class ViewController: UIViewController {
     func addImageViews() {
         var xPos = 0
         let yPos = 0
+        
         for animal in animals {
             let imageView = UIImageView(image: animal.image)
             imageView.frame = CGRect(x: xPos, y: yPos, width: 375, height: 375)
@@ -75,6 +81,8 @@ class ViewController: UIViewController {
         }
     }
     
+    // Mark Actions
+    
     @objc func buttonTapped(sender: UIButton) {
         let index = sender.tag
         
@@ -83,7 +91,7 @@ class ViewController: UIViewController {
         
         self.present(alertController, animated: true, completion: nil)
         
-        /* Referenced https://www.ioscreator.com/tutorials/play-music-avaudioplayer-ios-tutorial */
+        /* Referenced https://www.hackingwithswift.com/example-code/media/how-to-play-sounds-using-avaudioplayer */
         
         let audioPath = Bundle.main.path(forResource: animals[index].soundPath, ofType: "mp3")!
         let url = URL(fileURLWithPath: audioPath)
@@ -94,10 +102,10 @@ class ViewController: UIViewController {
         } catch {
             print("Audio File Not Found")
         }
-        
     }
-
 }
+
+// Mark Scroll View Delegate
 
 extension ViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -105,11 +113,11 @@ extension ViewController: UIScrollViewDelegate {
     let index = Int(((scrollView.contentOffset.x + 187.5) / 375))
     speciesLabel.text = animals[index].species
         
-    // trig help provided by friend Clare
+    // trig refresher/help provided by friend Clare
+    // (I had a working version previously, but it was not pretty)
+        
     let z = (scrollView.contentOffset.x/375) * (2 * CGFloat.pi)
     speciesLabel.alpha = (0.5 * cos(z)) + 0.5
 
-        
     }
-    
 }
